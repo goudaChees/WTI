@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=chrome">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="static/wti.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!--<script th:src="@{https://code.jquery.com/jquery-3.5.1.slim.min.js}"
+  crossorigin="anonymous"></script>-->
+  <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous">
+  <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+      integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+      crossorigin="anonymous"></script>
+  <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+      integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+      crossorigin="anonymous"></script>
+  
+  <!-- <link rel="stylesheet" href="/main.css"> -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    body {
+            margin: 0px;
+        }
+        
+    * {
+      box-sizing: border-box;
+    }
+
+    .page_title {
+      color: #ff6666;
+      left: 250px;
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .bottom-section {
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .bottom-menu {
+        position: fixed;
+        bottom: 0; 
+        height: 50px; 
+        font-weight: bold;
+        justify-content: space-around;
+        text-align: center;
+        flex-direction: column-reverse;
+        margin-left: calc(50% - 105px);
+    }
+
+    
+    /*
+    canvas {
+      border: 1px dotted red;
+    }
+    */
+    .chart_top_info_container, .next_timeframes, .addIndex {
+      width: 100%;
+      /*margin-left: calc(50% - 450px);*/
+      justify-content: space-between;
+    }
+
+    .chart_container {
+      max-width: 900px;
+      top: 200px;
+      height: 350px;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .chart_container2{
+      max-width: 900px;
+      top: 200px;
+      height: 350px;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    a {
+      text-decoration-line: none;
+    }
+
+    table {
+      width: 100%;
+      /*border-top: 1px solid #222222;  */
+      border-collapse: collapse;
+  }
+
+    th, td {
+      padding: 5px;
+      border-bottom: 1px solid #222222;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container m-auto">
+    <!-- Nav -->
+      <nav class="navbar fixed-top" style="border-color: #2EC4B6;" width:100%;>
+          <div class="container-fluid">
+            <div style="padding:auto;">
+              <a class="navbar-brand" href="#" onclick="location.href='page';"><img src="/static/WTI_logo(white).png"></a>
+            </div>
+              <button
+                  class="navbar-toggler "
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasNavbar"
+                  aria-controls="offcanvasNavbar">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div
+                  class="offcanvas offcanvas-end"
+                  tabindex="-1"
+                  id="offcanvasNavbar"
+                  aria-labelledby="offcanvasNavbarLabel">
+                  <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasNavbarLabel">More WTI</h5>
+                      <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="offcanvas"
+                          aria-label="Close"></button>
+                  </div>
+                  <div class="offcanvas-body">
+                      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item color-primary">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="#"
+                                onclick="location.href='page5?time=180';">Graph</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="location.href='page6?day=50';">Forecast</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="location.href='page2?page=1';">News</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#" onclick="location.href='page';">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">insights</a>
+                        </li>
+                  </div>
+              </div>
+          </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="row m-auto ">
+          <div class="col-12 h1">
+            <br>
+            <div class="h1">WTI Price Forecast</div>
+            
+            <!-- <div class="body2"> WTI 예측 페이지 입니다.</div> -->
+          </div>
+      </div>
+        <br>
+        
+        <div style="border-bottom : 0.2rem solid #2ec4b6;" margin-top:"2rem"></div>
+    </div>
+
+    <div class="container">
+      <div id="row1" class="row m-auto ">
+        <div class="chart_top_info_container">
+          <table>
+            <tbody id="today_wti_info" align="left">
+              <tr>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="next_timeframes body3 mt-3" align="left">
+          <span><div>We forecast oil price</div></span>
+          <span><a href="#" onclick="location.href='/page6?day=1';" class="time body4">1 </a></span> / 
+          <span><a href="#" onclick="location.href='/page6?day=2';" class="time body4">2 </a></span> / 
+          <span><a href="#" onclick="location.href='/page6?day=5';" class="time body4">5 </a></span> / 
+          <span><a href="#" onclick="location.href='/page6?day=10';" class="time body4">10 </a></span> / 
+          <span><a href="#" onclick="location.href='/page6?day=25';" class="time body4">25 </a></span> / 
+          <span><a href="#" onclick="location.href='/page6?day=50';" class="time body4">50</a></span>
+          <span>(d)</span>
+        </div>
+      </div>
+      <!-- <div class="row">
+        <div class="col" style="padding-left:1rem;">
+          <span id="highbtn">
+            <div class="btn-group dropend">
+              <button type="button" class="btn btn-danger">
+                
+              </button>
+              <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropend</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" >High Price Day (00/00/00)</a></li>
+                <li><img width="100%" src="/static/rise.png" style="margin:auto;"></li>
+                <hr>
+                <li><a class="dropdown-item" href="#" onclick="location.href='/page4?news_id=4';"> 뉴스1 </a></li>
+                <li><a class="dropdown-item" href="#" onclick="location.href='/page4?news_id=3';"> News2 </a></li>
+              </ul>
+            </div>
+          </span>
+        </div>
+        <div class="col" align="right" style="padding-right:0rem;"> 
+          <span id="lowbtn">
+            <div class="btn-group dropstart">
+              <button type="button" class="btn btn-primary">
+                
+              </button>
+              <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropend</span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Low Price Day (00/00/00)</a></li>
+                <li><img  src="/static/fall.png" style="margin:auto;"></li>
+                <hr>
+                <li><a class="dropdown-item" href="#" onclick="location.href='page2?page=1';">관련 뉴스 보러 가기 </a></li>
+              </ul>
+            </div>
+          </span>
+        </div>
+      </div> -->
+
+      <div class="chart_container">
+        <canvas id="myChart" height="80vw" width="90vw"></canvas>
+      </div>
+
+      <div class="chart_container2">
+        <canvas id="myChart2" height="80vw" width="90vw"></canvas>
+      </div>
+      
+      <div class="chart_bottom_info_container">
+        <table align="center">
+          <tbody id="today_wti_info_b" align="left">
+            <tr>
+    
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <br><br>
+      <div class="wt_info_container">
+        <table id="wt_table"  align="center" width="#" style="table-layout:fixed">
+          <tbody id="wt_tbody">
+            <tr align="space-between">
+              <th width="3.25rem" style="text-overflow:ellipsis; word-break:break-all;">Date</th>
+              <th width="6.25rem" style="word-break:break-all;">Rank1</th>
+              <th width="6.25rem" style="word-break:break-all;">Rank2</th>
+              <th width="6.25rem" style="word-break:break-all;">Rank3</th>
+              <!-- <th width="6.25rem" style="text-overflow:ellipsis; overflow:hidden">Weight2</th> -->
+            </tr>
+              
+          </tbody>
+        </table>
+      </div>
+      <!-- <div class="news_rec" align="center">
+        <h2> WTI Futures News</h2>
+        <p>데이타에 70% 영향 준 뉴스</p>
+        <p>데이타에 50% 영향 준 뉴스</p>
+      </div> -->
+      
+      
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<script>
+  // 페이지내 ajax 다시 리로드 ----------------------
+  window.addEventListener("load", function(event) {
+    let f_period = window.location.href.split("?")[1].split("=")[1]
+    console.log(f_period)
+
+    $.ajax({
+    type: "GET",
+    url: "/wti_forecast/" + f_period,
+    data: {},
+    dataType:"json",
+    success: function(response) {
+      // response [{},{},{},...]
+      //response.reverse();
+      console.log(response)
+      console.log(response[0])
+      console.log(response[0][0])
+
+      // let WTI_price_change = (response[0][0].WTI_price) - (response[0][1].WTI_price)
+      // WTI_price_change = WTI_price_change.toFixed(2)
+
+     
+
+      //차트 하부 info
+      $("#today_wti_info_b").append(`
+          <tr class="body3" align="space-between" style="color: #2EC4B6;">
+            <th width="300px">PREV CLOSE</th>
+            <th width="300px">VOLUME</th>
+          </tr><tr class="body2">
+            <td>$ 82.98</td>
+            <td>${response[0][0].WTI_vol} bbl</td>
+          </tr>
+        `)
+
+      //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+      const dateList = []
+      const wtipriceList = []
+      const wtivolList = []
+      const f_priceList = []
+      const wt_dateList = []
+      const r1_dateList = []
+      const r1_colList = []
+      const r1_weightList = []
+      const r2_dateList = []
+      const r2_colList = []
+      const r2_weightList = []
+      const r3_dateList = []
+      const r3_colList = []
+      const r3_weightList = []
+
+      for (const res of response[1]) {
+        dateList.push(res["pred_date"])
+        f_priceList.push(res["pred_price"])
+      }
+     console.log("pre_date" + dateList)
+
+      //forcasting price x,y값으로 받기 //////////////
+      const fore_p_arr = dateList.map((xvalue, index) => {
+        let fore_p_obj = {};
+        fore_p_obj.x = xvalue;
+        fore_p_obj.y = f_priceList[index];
+        console.log(xvalue);
+        console.log(f_priceList[index]);
+        return fore_p_obj;
+      })
+      fore_p_arr.reverse()
+
+      console.log(fore_p_arr)
+
+      if (response[1].length > 10) {
+        for (const res of response[0]) {
+          dateList.push(res["wti_date"])
+          wtipriceList.push(res["WTI_price"])
+          f_priceList.push(res["WTI_price"])
+          wtivolList.push(res["WTI_vol"])
+        }
+      }
+      else if (response[1].length <= 10) {
+        for (var i=0; i<10; i++) {
+            dateList.push(response[0][i]["wti_date"])
+            wtipriceList.push(response[0][i]["WTI_price"])
+            f_priceList.push(response[0][i]["WTI_price"])
+            wtivolList.push(response[0][i]["WTI_vol"])
+          }
+      }
+      console.log("pre_dateall" + dateList)
+
+      for (const res of response[2]) {
+        wt_dateList.push(res["weight_date"])
+        r1_dateList.push(res["r1_date"])
+        r1_colList.push(res["r1_col"])
+        r1_weightList.push(res["r1_weight"])
+        r2_dateList.push(res["r2_date"])
+        r2_colList.push(res["r2_col"])
+        r2_weightList.push(res["r2_weight"])
+        r3_dateList.push(res["r3_date"])
+        r3_colList.push(res["r3_col"])
+        r3_weightList.push(res["r3_weight"])
+      }
+      console.log("wt_date" + wt_dateList)
+
+      let price_change = ((f_priceList[0] - wtipriceList[0]) / wtipriceList[0])*100
+      price_change = price_change.toFixed(2);
+
+      //차트 상부 info
+      if (price_change >= 0) {
+        $("#today_wti_info").append(`
+          <tr>
+            <th class="h3" style="color:#2EC4B6;" colspan=3><font size="6">$${response[1][0].pred_price}</font></th>
+          </tr>
+          <tr>
+            <th>After ${f_period} days </th>
+            <th>Today <span style="color: #111111;"> $${response[0][0].WTI_price}</span></th>
+            <th>Change <span style="color: #ff6666;"> +${price_change}%</span></th>
+          </tr>
+        `)        
+      }
+      else {
+        $("#today_wti_info").append(`
+          <tr>
+            <th class="h3" style="color:#2EC4B6;" colspan=3><font size="6">$${response[1][0].pred_price}</font></th>
+          </tr>
+          <tr>
+            <th>After ${f_period} days </th>
+            <th>Today <span style="color: #111111;"> $${response[0][0].WTI_price}</span></th>
+            <th>Change <span style="color: blue;"> ${price_change}%</span></th>
+          </tr>
+        `)   
+      }
+
+  
+  
+
+      dateList.reverse()  
+      wtipriceList.reverse()  //wti price 값
+      //wtivolList.reverse()  
+      f_priceList.reverse()  //wti price 값 + 예측 wti price 값
+      wt_dateList.reverse()
+      r1_dateList.reverse()
+      r1_colList.reverse()
+      r1_weightList.reverse()
+      r2_dateList.reverse()
+      r2_colList.reverse()
+      r2_weightList.reverse()
+      r3_dateList.reverse()
+      r3_colList.reverse()
+      r3_weightList.reverse()
+      
+      // console.log(dateList)
+      // console.log(wtipriceList)
+      // console.log(f_priceList)
+      console.log(wt_dateList)
+      console.log("foreprice" + f_priceList)
+
+     
+
+
+      const ctx = document.getElementById("myChart").getContext("2d")
+      let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, "rgba(255,90,90,0.5)");
+      gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+
+      const config = {
+        plugins: [{
+            afterDraw: chart => {
+              if (chart.tooltip?._active?.length) {               
+                let x = chart.tooltip._active[0].element.x;             
+                let yAxis = chart.scales.y;
+                let ctx = chart.ctx;
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, yAxis.top);
+                ctx.lineTo(x, yAxis.bottom);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                ctx.stroke();
+                ctx.restore();
+              }
+            }
+          }],
+          
+          data: {
+              labels: dateList,
+              datasets: [
+                  {
+                      type: 'line',
+                      label: "WTI Price",
+                      data: wtipriceList,
+                      borderColor: '#222222',
+                      borderWidth: 2.5,
+                     // backgroundColor: gradient,
+                      pointBorderColor: 'red',
+                      pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                      pointStyle: 'circle',
+                      pointRadius: 0,
+                      pointHoverRadius: 12,
+                      categoryPercentage: 0.8,
+                  },
+                  {
+                        type: 'line',
+                        label: "Forecast Price",
+                        data: f_priceList, // list 재생성
+                        borderColor: '#ff0000',
+                        borderWidth: 2,
+                        backgroundColor: gradient,
+                        pointBorderColor: 'red',
+                        pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                        pointStyle: 'circle',
+                        pointRadius: 0,
+                        pointHoverRadius: 12,
+                        categoryPercentage: 0.8,
+                  }
+              ],
+          },
+          options: {
+              fill: true,
+              responsive: true,
+              maintainAspectRatio: false,  
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  type: 'linear',
+                  position : 'right',
+                  //stack: 'demo',
+                  beginAtZero: false,
+                  title: {
+                    display : true,
+                    text: 'WTI Price'
+                  },
+                  grid: {
+                    display: true
+                  }
+                }
+              },
+                interaction: {
+                intersect: false,
+                mode: 'index',
+              },
+              
+                      // beginAtZero: false
+          }, // data code 끝
+      } // config code 끝
+
+      const chart = new Chart(ctx, config);
+
+      //Weight chart -> stacked bar chart
+      //Chart.register(ChartjsPluginStacked100.default); 
+
+      var dictObject = {} 
+      for (const res of response[2]) {
+        dictObject
+        dictObject[res["weight_date"]] = res["r1_col"]+'\n'+res["r2_col"]+'\n'+res["r3_col"]+'\n';
+
+        // console.log('wtdic' + dictObject[res["weight_date"]])
+        // console.log('wtdickey' + Object.keys(dictObject))
+      }
+
+
+      const ctx2 = document.getElementById("myChart2").getContext("2d")
+      const config2 = {
+          type: 'bar',
+          data: {
+              labels: wt_dateList,
+              // index: i,
+              // r1_colList
+              datasets: [
+                  {
+                      label: 'Rank1',
+                      data: r1_weightList,
+                      backgroundColor: "#ff6666",
+                      borderColor: "red",
+                      borderwidth: 1
+                  },
+                  {
+                      label: 'Rank2',
+                      data: r2_weightList,
+                      backgroundColor: "#2EC4B6",
+                      borderColor: "blue",
+                      borderwidth: 1
+                  },
+                  {
+                      label: 'Rank3',
+                      data: r3_weightList,
+                      backgroundColor: "#ccff66",
+                      borderColor: "green",
+                      borderwidth: 1
+                  },
+              ],
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+              // stacked100: {
+              //   enable: true,
+              //   precision: 3
+              // },
+              title: {
+                display: true,
+                text: '유가 영향 요인 분석'
+              },
+                tooltip: {
+                  mode: 'index',
+                  intersect: true,
+                  callbacks: {
+                    
+                      footer: function(context) {
+                          // labels: wt_dateList
+                          // index: i
+                          // console.log( r1_colList[i]+'\n'+r1_colList[i]+'\n'+r1_colList[i])
+                          // let exam = r1_colList[i]+'\n'+r1_colList[i]+'\n'+r1_colList[i]
+
+                        return `${dictObject[context[1].label]}`;
+                      }
+                    }
+                  }
+                },
+               
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  stacked: true,
+                  position : 'right',
+                  title: {
+                    display : true,
+                    text: 'Weight'
+                  }
+                }
+              }
+                     // beginAtZero: false
+          } // option code 끝
+      } // config code 끝
+
+      const chart2 = new Chart(ctx2, config2);
+      // const actions = [
+      //   {
+      //     name: 'Randomize',
+      //     handler(chart2) {
+      //       chart2.data.datasets.forEach(dataset => {
+      //         dataset.data = Utils.numbers({count: chart2.data.labels.length, min: -100, max: 100});
+      //       });
+      //       chart2.update();
+      //     }
+      //   },
+      // ];
+      for (let i = 0; i < r1_colList.length; i++) {
+        $("#wt_tbody").append(`
+          <tr>
+            <td class="body3_1" align="space-between" style="text-overflow:ellipsis; word-break:break-all; color: #2EC4B6;" rowspan="3">${wt_dateList[i]}</td>
+            <td class="wtcol" style="word-break:break-all; vertical-align : top; color: #2EC4B6;, width:6.25rem;"><b>${r1_colList[i]}</b></td>
+            <td class="wtcol" style="word-break:break-all; vertical-align : top; color: #2EC4B6;"><b>${r2_colList[i]}</b></td>
+            <td class="wtcol" style="word-break:break-all; vertical-align : top; color: #2EC4B6;"><b>${r3_colList[i]}</b></td>
+          </tr><tr class="body2" align="space-between">  
+            <td>${r1_dateList[i]}</td>
+            
+            <td>${r2_dateList[i]}</td>
+           
+            <td>${r3_dateList[i]}</td>
+           
+          </tr><tr class="body2" align="space-between">  
+            <td>${r1_weightList[i]}</td>
+            <td>${r2_weightList[i]}</td>
+            <td>${r3_weightList[i]}</td>
+          </tr>
+          
+        `)
+        console.log(r1_colList[i])
+      } 
+    },
+  });
+
+   console.log("All resources finished loading!");
+ });
+
+</script>
+</body>
+</html>

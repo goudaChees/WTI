@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<style>
+    .top-container {
+        width: 600px;
+        margin-left: calc(50% - 300px);
+        height: 100%;
+
+      }
+
+    .head-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 55px;
+        flex-direction: column;
+    }
+
+
+
+</style>
+<body>
+<div class="top-container">
+    <div class="head-container">
+        <img src="/static/student.png">
+        <h1>학생 점수 관리 시스템</h1>
+
+    </div>
+    <div class="input-container">
+        <table border="1" align="center">
+            <tr>
+                <th>학생 이름 : <input type="text" id="student" name="student" placeholder="input Name"></th>
+                <th>국어 : <input type="text" id="korScore" name="korScore" placeholder="input Kor"> </th>
+                <th>수학 : <input type="text" id="mathScore" name="mathScore" placeholder="input Math"> </th>
+                <th>영어 : <input type="text" id="engScore" name="engScore" placeholder="input Eng"></th>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                <input type="button" id="insert" value="저장">
+                <input type="button" id="delete" value="삭제">
+                <input type="button" id="update" value="수정">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <input type="radio" name="radioType"  class="radioType" value="orderByKor"> 국어    /
+                    <input type="radio" name="radioType"  class="radioType" value="orderByMath"> 수학    /
+                    <input type="radio" name="radioType"  class="radioType" value="orderByEng"> 영어
+
+                    <button id="btn">정렬</button>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <div class="input-container" >
+            <ul>---- Score List ----</ul>
+            <ul id="input-ul">
+
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $.ajax({
+        type : "GET",
+        url : "/student",
+        data : {},
+        success :  function (resp) {
+            for (let one of resp) {
+                $('#input-ul').append(`
+                    <li>[ ${one.name} ]
+                    국어 : ${one.kor} /
+                    수학 : ${one.math} /
+                    영어 : ${one.eng} </li>
+                `)
+            }
+        }
+    })
+
+    $("#insert").on("click", ()=> {
+
+        let name = $("#student").val()
+        let kor = $("#korScore").val()
+        let math = $("#mathScore").val()
+        let eng = $("#engScore").val()
+
+        $.ajax({
+            type : "POST",
+            url : "/student",
+            data : {
+                "name" : name,
+                "kor" : kor,
+                "math" : math,
+                "eng" : eng
+            },
+            success : function (response){
+                console.log(response)
+                location.reload()
+            }
+        })
+    })
+
+    $("#update").on("click", ()=> {
+        let name = $("#student").val()
+        let kor = $("#korScore").val()
+        let math = $("#mathScore").val()
+        let eng = $("#engScore").val()
+            $.ajax({
+                type : "PUT",
+                url : "/student",
+                data : {
+                    "name" : name,
+                    "kor" : kor,
+                    "math" : math,
+                    "eng" : eng
+                },
+                success : function (response) {
+                    console.log(response)
+                    location.reload()
+                }
+            })
+    })
+
+    $("#delete").on("click", ()=> {
+        let name = $("#student").val()
+            $.ajax({
+                type : "DELETE",
+                url : "/student?name="+name,
+                data : {},
+                success : function(resp){
+                    console.log(resp)
+                    location.reload()
+                }
+            })
+    })
+
+
+    $("#btn").on("click", ()=> {
+        let checking ;
+        let checkLength = document.getElementsByName("radioType").length
+
+        for (let i = 0 ; i < checkLength ; i++) {
+            if (document.getElementsByName("radioType")[i].checked == true) {
+                checking = document.getElementsByName("radioType")[i].value
+            }
+        }
+
+        if (checking === "orderByKor") {
+            $("#input-ul").empty()
+
+            $.ajax ({
+                type : "GET",
+                url : "/student/orderKor",
+                data : {},
+                success :  function (resp) {
+                    for (let one of resp) {
+                        $('#input-ul').append(`
+                            <li>[ ${one.name} ]
+                            국어 : ${one.kor} /
+                            수학 : ${one.math} /
+                            영어 : ${one.eng} </li>
+                        `)
+                    }
+                }
+
+            })
+        }else if (checking === "orderByMath") {
+            $("#input-ul").empty()
+
+            $.ajax({
+                type : "GET",
+                url : "/student/orderMath",
+                data : {},
+                success :  function (resp) {
+                    for (let one of resp) {
+                        $('#input-ul').append(`
+                            <li>[ ${one.name} ]
+                            국어 : ${one.kor} /
+                            수학 : ${one.math} /
+                            영어 : ${one.eng} </li>
+                        `)
+                    }
+                }
+            })
+        }else if (checking == "orderByEng") {
+            $("#input-ul").empty()
+
+            $.ajax({
+                type : "GET",
+                url : "/student/orderEng",
+                data : {},
+                success :  function (resp) {
+                    for (let one of resp) {
+                        $('#input-ul').append(`
+                            <li>[ ${one.name} ]
+                            국어 : ${one.kor} /
+                            수학 : ${one.math} /
+                            영어 : ${one.eng} </li>
+                        `)
+                    }
+                }
+            })
+        }
+
+
+    })
+
+</script>
+</body>
+</html>

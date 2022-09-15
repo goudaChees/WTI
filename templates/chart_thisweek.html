@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=chrome">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="static/wti.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!--<script th:src="@{https://code.jquery.com/jquery-3.5.1.slim.min.js}"
+  crossorigin="anonymous"></script>-->
+  <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous">
+  <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+      integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+      crossorigin="anonymous"></script>
+  <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+      integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+      crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="/main.css"> -->
+  
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+  <style>
+    body {
+            margin: 0px;
+        }
+
+    .head {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    /*
+    .top_circle {
+      width: 500px;
+      height: 500px;
+      background-color: #5d2e8c;
+      margin-top: -150px;
+      border-radius:50%;
+      margin-left: -600px;
+    }
+    */
+
+    .top_shape {
+      position: fixed;
+      top: 0px;
+      width: 100%;
+      height: 150px;
+      background-color: #5d2e8c;
+      border-radius: 0px 0px 50px 50px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .page_title {
+      color: white;
+      left: 250px;
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+
+    a {
+      text-decoration-line: none;
+    }
+    /*
+    canvas {
+      border: 1px dotted red;
+    }
+    */
+    
+
+    .chart_container {
+      max-width: 900px;
+      top: 250px;
+      height: 550px;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .chart_container2 {
+      max-width: 900px;
+      top: 250px;
+      height: 400px;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    table {
+      width: 100%;
+      /*border-top: 1px solid #222222;  */
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 5px;
+      border-bottom: 1px solid #222222;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container m-auto">
+    <!-- Nav -->
+    <nav class="navbar fixed-top" style="border-color: #2EC4B6;" width:100%;>
+      <div class="container-fluid">
+        <div style="padding:auto;">
+          <a class="navbar-brand" href="#" onclick="location.href='page';"><img src="/static/WTI_logo(white).png"></a>
+        </div>
+              <button
+                  class="navbar-toggler "
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasNavbar"
+                  aria-controls="offcanvasNavbar">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div
+                  class="offcanvas offcanvas-end"
+                  tabindex="-1"
+                  id="offcanvasNavbar"
+                  aria-labelledby="offcanvasNavbarLabel">
+                  <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasNavbarLabel">More WTI</h5>
+                      <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="offcanvas"
+                          aria-label="Close"></button>
+                  </div>
+                  <div class="offcanvas-body">
+                      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item color-primary">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="#"
+                                onclick="location.href='page5?time=180';">Graph</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="location.href='page6?day=50';">Forecast</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="location.href='page2?page=1';">News</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#" onclick="location.href='page';">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">insights</a>
+                        </li>
+                  </div>
+              </div>
+          </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="row m-auto ">
+          <div class="col-12 h1">
+            <br>
+            <div class="h1">WTI Price Chart</div>
+            
+            <!-- <div class="body2"> WTI 가격 그래프 입니다.</div> -->
+          </div>
+      </div>
+        <br>
+        
+        <div style="border-bottom : 0.2rem solid #2ec4b6;" margin-top:"2rem"></div>
+    </div>
+
+    <div class="container">
+      <div id="row1" class="row m-auto ">
+        <div class="chart_top_info_container">
+          <table>
+            <tbody id="today_wti_info" align="left">
+              <tr>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    
+    <div>
+      <div class="timeframes body3 mt-3" align="left">
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=7';">1W</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=30';">1M</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=90';">3M</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=180';">6M</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=365';">1Y</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=1095';">3Y</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=1825';">5Y</a></span> / 
+        <span><a style="color:black;" href="#" onclick="location.href='/page5?time=3650';">10Y</a></span> 
+      </div>
+      <div class="addIndex body3 mt-2" align="left">
+        <span><div style="display:inline;"><font color="#aaaaaa" size="2px">Add a comparison ▶</font></div></span>
+        <!--<span><a href="#" onclick="renderWithCPI();">CPI</a></span>-->
+        <!--<span><a href="javascript:renderWithCPI();">aaa</a></span>-->
+        <!-- <span><a href="/page5?time=90;" onclick="return renderWithCPI();">ㅠㅠㅠ</a></span>  -->
+        <span><div onclick="renderWithUSDX();" style="cursor: pointer; display:inline;">USDX</div></span> / 
+        <span><div onclick="renderWithDJI();" style="cursor: pointer; display:inline;">DJI</div></span> / 
+        <span><div onclick="renderWithXLE();" style="cursor: pointer; display:inline;">XLE</div></span> / 
+        <span><div onclick="renderWithCPI();" style="cursor: pointer; display:inline;">CPI <!--<b>(3Y<i class="bi bi-arrow-bar-up"></i>)<b> --></div></span>
+        <!-- <span><div onclick="renderWithCLI();" style="cursor: pointer; display:inline;">CLI</div></span> -->
+      </div>
+    </div>
+    <br>
+    <div class="chart_container">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div></div>
+    <br><br>
+    <div class="chart_container2">
+      <canvas id="myChart2"></canvas>
+    </div>
+   
+    <br><br>
+    <div class="chart_bottom_info_container">
+      <table align="center">
+        <tbody id="today_wti_info_b" align="left">
+          <tr>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br><br>
+
+
+    <br><br>
+  <div class="wti_allinfo_container">
+    <span align="center" style="color:#2EC4B6;"><h3><b>Crude Oil WTI Futures Historical Data</b></h3></span>
+    <table align="center">
+      <tbody id="wti_allinfo" align="left">
+        <tr>
+          <th>Date</th>
+          <th>Price</th>
+          <th>Open</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>Volumn</th>
+          <th>Change</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  <br><br>
+    <!-- <div class="news_rec" align="center">
+      <h2> WTI Futures News</h2>
+      <p>데이타에 70% 영향 준 뉴스</p>
+      <p>데이타에 50% 영향 준 뉴스</p>
+      <p>데이타에 70% 영향 준 뉴스</p>
+      <p>데이타에 50% 영향 준 뉴스</p>
+      <p>데이타에 70% 영향 준 뉴스</p>
+      <p>데이타에 50% 영향 준 뉴스</p>
+    </div> -->
+  
+  
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<script>
+  // 페이지내 ajax 다시 리로드 ----------------------
+//  window.addEventListener("load", function(event) {
+    let period = window.location.href.split("?")[1].split("=")[1]
+    console.log(period)
+
+    $.ajax({
+    type: "GET",
+    url: "/wti_chart_this/" + period,
+    data: {},
+    dataType:"json",
+    success: function(response) {
+      // response [{},{},{},...]
+      response.reverse();
+      console.log(response[0])
+      console.log(response[0].WTI_price)
+      console.log(response[2].WTI_price)
+
+      // let WTI_price_change = (response[0].WTI_price) - (response[1].WTI_price)
+      // WTI_price_change = WTI_price_change.toFixed(2)
+
+      //차트 상부 info
+      $("#today_wti_info").append(`
+          <tr>
+            <th class="h3" style="color:#2EC4B6;"><font size="6">$${response[0].WTI_price}</font></th>
+            <th colspan=2></th>
+          </tr>
+          <tr >
+            <th style="color: #aaaaaa;"><span>Compared to previous day</span></th>
+            <th style="color: #ff6666;"><span>+\$4.19</span></th>
+            <th style="color: #ff6666;"><span>+4.59%</span></th>
+          </tr>
+        `)
+
+      //차트 하부 info
+      $("#today_wti_info_b").append(`
+          <tr class="body3_1" align="space-between" style="color: #2EC4B6;">
+            <th width="300px">PREV CLOSE</th>
+            <th width="300px">OPEN</th>
+            <th width="300px">VOLUME</th>
+          </tr><tr class="body2">
+            <td>$ ${response[0].WTI_price}</td>
+            <td>$ ${response[0].WTI_open}</td>
+            <td>${response[0].WTI_vol} bbl</td>
+          </tr>
+        `)
+
+      //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+      const dateList = []
+      const wtipriceList = []
+      const wtivolList = []
+      const wtiopenList = []
+      const wtihighList = []
+      const wtilowList = []
+      const wtichangeList = []
+      const DworldList = []
+      const SworldList = []
+
+      for (const res of response) {
+        dateList.push(res["Date"])
+        wtipriceList.push(res["WTI_price"])
+        wtivolList.push(res["WTI_vol"])
+        wtiopenList.push(res["WTI_open"])
+        wtihighList.push(res["WTI_high"])
+        wtilowList.push(res["WTI_low"])
+        wtichangeList.push(res["WTI_change"])
+        DworldList.push(res["D_world"]/1000000)
+        SworldList.push(res["S_world"]/1000000)
+      }
+      dateList.reverse()  
+      wtipriceList.reverse()  
+      wtivolList.reverse() 
+      wtiopenList.reverse()  
+      wtihighList.reverse() 
+      wtilowList.reverse() 
+      wtichangeList.reverse() 
+      DworldList.reverse() 
+      SworldList.reverse()
+
+      console.log(dateList)
+      console.log(wtipriceList)
+      console.log(wtivolList)
+      console.log('DworldList' + DworldList)
+      console.log('SworldList' + SworldList)
+
+      // WTI total info table        
+      for (let i = 0; i < wtipriceList.length; i++) {
+        $("#wti_allinfo").append(`
+            <tr>
+              <td>${dateList[i]}</td>
+              <td>${wtipriceList[i]}</td>
+              <td>${wtiopenList[i]}</td>
+              <td>${wtihighList[i]}</td>
+              <td>${wtilowList[i]}</td>
+              <td>${wtivolList[i]}</td>
+              <td>${wtichangeList[i]}</td>
+            </tr>
+          `)
+      }
+
+      const ctx = document.getElementById("myChart").getContext("2d")
+      const ctx2 = document.getElementById("myChart2").getContext("2d")
+
+      let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, "rgba(46,196,182,0.4)");
+      gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+      
+
+      const config = {
+        plugins: [{
+            afterDraw: chart => {
+              if (chart.tooltip?._active?.length) {               
+                let x = chart.tooltip._active[0].element.x;             
+                let yAxis = chart.scales.y;
+                let yAxis1 = chart.scales.y1;
+                let ctx = chart.ctx;
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, yAxis.top);
+                ctx.lineTo(x, yAxis1.bottom);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                ctx.stroke();
+                ctx.restore();
+              }
+            }
+          }],
+          
+          data: {
+              labels: dateList,
+              datasets: [
+                  {
+                      type: 'line',
+                      label: "WTI Price",
+                      data: wtipriceList,
+                      borderColor: '#2EC4B6',
+                      borderWidth: 2,
+                      backgroundColor: gradient,
+                      pointBorderColor: 'red',
+                      pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                      pointStyle: 'circle',
+                      pointRadius: 0,
+                      pointHoverRadius: 12,
+                      categoryPercentage: 0.8,
+                  },
+                  {
+                      type: 'bar',
+                      label: "WTI Volumn",
+                      yAxisID : 'y1',
+                      data: wtivolList,
+                      borderColor: '#ff6666',
+                      //borderWidth: 0.5,   
+                      backgroundColor: '#222222',
+                      hoverBorderColor: '#5d2e8c',
+                      categoryPercentage: 0.8,
+                      barPercentage: 0.2,
+                      barThickness: 1
+                  }
+              ],
+          },
+          options: {
+              fill: true,
+              responsive: true,
+              maintainAspectRatio: false,  
+              scales: {
+                x: {
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  type: 'linear',
+                  position : 'right',
+                  stack: 'demo',
+                  beginAtZero: false,
+                  title: {
+                    display : true,
+                    text: 'WTI Price'
+                  },
+                  grid: {
+                    display: true
+                  }
+                },
+                y1: {
+                  offset: true,
+                  type: 'linear',
+                  position : 'right',
+                  stack: 'demo',
+                  beginAtZero: false,
+                  title: {
+                    display : true,
+                    text: 'WTI Volume'
+                  },
+                  grid: {
+                    display: true
+                  },
+                  ticks: {
+                    beginAtZero: true,
+                    callback: function(value, index, values) {
+                      if(values[0].toString().length > 4 && value != 0) return (Math.floor(value / 100000)).toLocaleString("ko-KR") + "0.0K";
+                      else if(values[0].toString().length = 4 && value != 0) return (value / 100000).toFixed(1) + "0.0k";
+                      else return value.toLocaleString("ko-KR");
+                    },
+                  },        
+                },
+              },
+              interaction: {
+                intersect: false,
+                mode: 'index',
+              },
+                      // beginAtZero: false
+          }, // data code 끝
+      } // config code 끝
+
+      const config2 = {
+          plugins: [{
+            afterDraw: chart => {
+              if (chart.tooltip?._active?.length) {               
+                let x = chart.tooltip._active[0].element.x;             
+                let yAxis = chart.scales.y;
+                let ctx = chart.ctx;
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, yAxis.top);
+                ctx.lineTo(x, yAxis.bottom);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                ctx.stroke();
+                ctx.restore();
+              }
+            }
+          }],
+          data: {
+              labels: dateList,
+              datasets: [
+                  {
+                      type: 'line',
+                      label: "Demand World Consumption day",
+                      data: DworldList,
+                      borderColor: '#2EC4B6',
+                      borderWidth: 2,
+                      backgroundColor: gradient,
+                      pointBorderColor: 'red',
+                      pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                      pointStyle: 'circle',
+                      pointRadius: 0,
+                      pointHoverRadius: 12,
+                      categoryPercentage: 0.8,
+                  },
+                  {
+                      type: 'line',
+                      label: "Supply World Production day",
+                      data: SworldList,
+                      borderColor: '#5d2e8c',
+                      borderWidth: 2,
+                      backgroundColor: 'rgba(255, 255, 255, 0.4)',   //'rgba(255, 102, 102, 0.4)',
+                      pointBorderColor: 'red',
+                      pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                      pointStyle: 'circle',
+                      pointRadius: 0,
+                      pointHoverRadius: 12,
+                      categoryPercentage: 0.8,
+                  },
+              ],
+          },
+
+          options: {
+              fill: true,
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Global Oil Supply, Demand, and Inventories'
+                },
+                // tooltip: {
+                //   mode: 'index',
+                //   intersect: true
+                //   }
+                },  
+              scales: {
+                x: {
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  type: 'linear',
+                  position : 'right',
+                  // stack: 'demo',
+                  //beginAtZero: true,
+                  title: {
+                    display : true,
+                    text: 'in million barrels per day'
+                  },
+                  grid: {
+                    display: true
+                  }
+                }
+              },
+              interaction: {
+                intersect: true,
+                mode: 'index',
+              },
+                      // beginAtZero: false
+          }, // data code 끝
+      } // config2 code 끝
+
+      const chart = new Chart(ctx, config);
+
+      const chart2 = new Chart(ctx2, config2);
+
+    } // 기본 함수 끝
+  });
+/*
+      function renderWithCPI() {
+        let period = ?
+        $.ajax({
+          url: "/wit?period" + period
+        }, {
+          Chart 제거
+          이제 새로 들어온 데이터를 기준 차트 그립니다. 끝!
+        })
+      
+      }
+*/
+
+function renderWithUSDX() {
+        console.log('func1')
+        console.log(period)
+        $.ajax({
+          type: "GET",
+          url: "/wti_chart_addIndex/" + period,
+          data: {},
+          dataType:"json",
+          success: function(response) {
+            // response [{},{},{},...]
+                      
+            // JS - Destroy exiting Chart Instance to reuse <canvas> element
+            let chartStatus = Chart.getChart("myChart"); // <canvas> id
+              if (chartStatus != undefined) {
+                chartStatus.destroy();
+              }
+            //-- End of chart destroy  
+
+            response.reverse();
+            console.log(response[0])
+
+            //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+            const dateList = []
+            const wtipriceList = []
+            const wtivolList = []
+            const usdxList = []
+            for (const res of response) {
+                dateList.push(res["Date"])
+                wtipriceList.push(res["WTI_price"])
+                wtivolList.push(res["WTI_vol"])
+                usdxList.push(res["Dollar_Index"])
+            }
+            dateList.reverse()  
+            wtipriceList.reverse()  
+            wtivolList.reverse()  
+            usdxList.reverse() 
+
+            console.log(dateList)
+            console.log(wtipriceList)
+            console.log(wtivolList)
+            console.log('USDX' + usdxList)
+
+            let ctx = document.getElementById("myChart").getContext("2d")
+           
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, "rgba(46,196,182,0.4)");
+            gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+
+            const config = {
+              plugins: [{
+                  afterDraw: chart => {
+                    if (chart.tooltip?._active?.length) {               
+                      let x = chart.tooltip._active[0].element.x;             
+                      let yAxis = chart.scales.y;
+                      let yAxis1 = chart.scales.y1;
+                      let ctx = chart.ctx;
+                      ctx.save();
+                      ctx.beginPath();
+                      ctx.moveTo(x, yAxis.top);
+                      ctx.lineTo(x, yAxis1.bottom);
+                      ctx.lineWidth = 1;
+                      ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                      ctx.stroke();
+                      ctx.restore();
+                    }
+                  }
+                }],
+                
+                data: {
+                    labels: dateList,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: "WTI Price",
+                            data: wtipriceList,
+                            borderColor: '#2EC4B6',
+                            borderWidth: 2,
+                            backgroundColor: gradient,
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'line',
+                            label: "DJI",
+                            data: usdxList,
+                            borderColor: '#2080F5',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'bar',
+                            label: "WTI Volume",
+                            yAxisID : 'y1',
+                            data: wtivolList,
+                            borderColor: '#ff6666',
+                            backgroundColor: '#222222',
+                            hoverBorderColor: '#5d2e8c',
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.2,
+                            barThickness: 1
+                        }
+                    ],
+                },
+                options: {
+                    fill: true,
+                    responsive: true,
+                    maintainAspectRatio: false,  
+                    scales: {
+                      x: {
+                        grid: {
+                          display: false
+                        }
+                      },
+                      y: {
+                        type: 'linear',
+                        position: 'right',
+                        stack: 'demo',
+                        beginAtZero: false,
+                        title: {
+                          display : true,
+                          text: 'WTI Price'
+                        },
+                        grid: {
+                          display: true
+                        }
+                      },
+                      y1: {
+                        offset: true,
+                        type: 'linear',
+                        position: 'right',
+                        stack: 'demo',
+                        title: {
+                          display : true,
+                          text: 'WTI Volume'
+                        },
+                        grid: {
+                          display: true
+                        },
+                        ticks: {
+                          beginAtZero: false,
+                          callback: function(value, index, values) {
+                            if(values[0].toString().length > 4 && value != 0) return (Math.floor(value / 100000)).toLocaleString("ko-KR") + "0.0K";
+                            else if(values[0].toString().length = 4 && value != 0) return (value / 100000).toFixed(1) + "0.0k";
+                            else return value.toLocaleString("ko-KR");
+                          },
+                        },        
+                      },
+                    },
+                    interaction: {
+                      intersect: false,
+                      mode: 'index',
+                    },
+                }, // data code 끝
+            } // config code 끝
+            chartInstance = new Chart(ctx, config);
+            }
+        });
+      } // renderWithUSDX function 끝     
+
+
+      function renderWithDJI() {
+        console.log('func2')
+        console.log(period)
+        $.ajax({
+          type: "GET",
+          url: "/wti_chart_addIndex/" + period,
+          data: {},
+          dataType:"json",
+          success: function(response) {
+            // response [{},{},{},...]
+                      
+            // JS - Destroy exiting Chart Instance to reuse <canvas> element
+            let chartStatus = Chart.getChart("myChart"); // <canvas> id
+              if (chartStatus != undefined) {
+                chartStatus.destroy();
+              }
+            //-- End of chart destroy  
+
+            response.reverse();
+            console.log(response[0])
+
+            //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+            const dateList = []
+            const wtipriceList = []
+            const wtivolList = []
+            const djiList = []
+            for (const res of response) {
+                dateList.push(res["Date"])
+                wtipriceList.push(res["WTI_price"])
+                wtivolList.push(res["WTI_vol"])
+                djiList.push(res["DJI_price"]/300)
+            }
+            dateList.reverse()  
+            wtipriceList.reverse()  
+            wtivolList.reverse()  
+            djiList.reverse() 
+
+            console.log(dateList)
+            console.log(wtipriceList)
+            console.log(wtivolList)
+            console.log('DJI' + djiList)
+
+            let ctx = document.getElementById("myChart").getContext("2d")
+           
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, "rgba(46,196,182,0.4)");
+            gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+
+            const config = {
+              plugins: [{
+                  afterDraw: chart => {
+                    if (chart.tooltip?._active?.length) {               
+                      let x = chart.tooltip._active[0].element.x;             
+                      let yAxis = chart.scales.y;
+                      let yAxis1 = chart.scales.y1;
+                      let ctx = chart.ctx;
+                      ctx.save();
+                      ctx.beginPath();
+                      ctx.moveTo(x, yAxis.top);
+                      ctx.lineTo(x, yAxis1.bottom);
+                      ctx.lineWidth = 1;
+                      ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                      ctx.stroke();
+                      ctx.restore();
+                    }
+                  }
+                }],
+                
+                data: {
+                    labels: dateList,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: "WTI Price",
+                            data: wtipriceList,
+                            borderColor: '#2EC4B6',
+                            borderWidth: 2,
+                            backgroundColor: gradient,
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'line',
+                            label: "DJI",
+                            data: djiList,
+                            borderColor: '#5d2e8c',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'bar',
+                            label: "WTI Volume",
+                            yAxisID : 'y1',
+                            data: wtivolList,
+                            borderColor: '#ff6666',
+                            backgroundColor: '#222222',
+                            hoverBorderColor: '#5d2e8c',
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.2,
+                            barThickness: 1
+                        }
+                    ],
+                },
+                options: {
+                    fill: true,
+                    responsive: true,
+                    maintainAspectRatio: false,  
+                    scales: {
+                      x: {
+                        grid: {
+                          display: false
+                        }
+                      },
+                      y: {
+                        type: 'linear',
+                        position: 'right',
+                        stack: 'demo',
+                        beginAtZero: false,
+                        title: {
+                          display : true,
+                          text: 'WTI Price'
+                        },
+                        grid: {
+                          display: true
+                        }
+                      },
+                      y1: {
+                        offset: true,
+                        type: 'linear',
+                        position: 'right',
+                        stack: 'demo',
+                        title: {
+                          display : true,
+                          text: 'WTI Volume'
+                        },
+                        grid: {
+                          display: true
+                        },
+                        ticks: {
+                          beginAtZero: false,
+                          callback: function(value, index, values) {
+                            if(values[0].toString().length > 4 && value != 0) return (Math.floor(value / 100000)).toLocaleString("ko-KR") + "0.0K";
+                            else if(values[0].toString().length = 4 && value != 0) return (value / 100000).toFixed(1) + "0.0k";
+                            else return value.toLocaleString("ko-KR");
+                          },
+                        },        
+                      },
+                    },
+                    interaction: {
+                      intersect: false,
+                      mode: 'index',
+                    },
+                }, // data code 끝
+            } // config code 끝
+            chartInstance = new Chart(ctx, config);
+            }
+        });
+      } // addDJI function 끝     
+  
+      function renderWithXLE() {
+        console.log('func3')
+        //const chart = new Chart(document.getElementById("myChart").getContext("2d"), config);
+        //chart.destroy();
+        // $("canvas#myChart").remove();
+        // $("div.myChart").append('<canvas id="myChart" class="animated fadeIn" height="600"></canvas>');
+    
+        console.log(period)
+        $.ajax({
+          type: "GET",
+          url: "/wti_chart_addIndex/" + period,
+          data: {},
+          dataType:"json",
+          success: function(response) {
+            // response [{},{},{},...]
+                      
+            // JS - Destroy exiting Chart Instance to reuse <canvas> element
+            let chartStatus = Chart.getChart("myChart"); // <canvas> id
+              if (chartStatus != undefined) {
+                chartStatus.destroy();
+              }
+            //-- End of chart destroy  
+
+            response.reverse();
+            console.log(response[0])
+
+            //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+            const dateList = []
+            const wtipriceList = []
+            const wtivolList = []
+            const xlepriceList = []
+            for (const res of response) {
+                dateList.push(res["Date"])
+                wtipriceList.push(res["WTI_price"])
+                wtivolList.push(res["WTI_vol"])
+                xlepriceList.push(res["XLE_price"])
+            }
+            dateList.reverse()  
+            wtipriceList.reverse()  
+            wtivolList.reverse()  
+            xlepriceList.reverse() 
+
+            console.log(dateList)
+            console.log(wtipriceList)
+            console.log(wtivolList)
+            console.log(xlepriceList)
+
+            let ctx = document.getElementById("myChart").getContext("2d")
+           
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, "rgba(46,196,182,0.4)");
+            gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+
+            const config = {
+              plugins: [{
+                  afterDraw: chart => {
+                    if (chart.tooltip?._active?.length) {               
+                      let x = chart.tooltip._active[0].element.x;             
+                      let yAxis = chart.scales.y;
+                      let yAxis1 = chart.scales.y1;
+                      let ctx = chart.ctx;
+                      ctx.save();
+                      ctx.beginPath();
+                      ctx.moveTo(x, yAxis.top);
+                      ctx.lineTo(x, yAxis1.bottom);
+                      ctx.lineWidth = 1;
+                      ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                      ctx.stroke();
+                      ctx.restore();
+                    }
+                  }
+                }],
+                
+                data: {
+                    labels: dateList,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: "WTI Price",
+                            data: wtipriceList,
+                            borderColor: '#2EC4B6',
+                            borderWidth: 2,
+                            backgroundColor: gradient,
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'line',
+                            label: "XLE",
+                            data: xlepriceList,
+                            borderColor: 'green',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'bar',
+                            label: "WTI Volume",
+                            yAxisID : 'y1',
+                            data: wtivolList,
+                            borderColor: '#ff6666',
+                            backgroundColor: '#222222',
+                            hoverBorderColor: '#5d2e8c',
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.2,
+                            barThickness: 1
+                        }
+                    ],
+                },
+                options: {
+                    fill: true,
+                    responsive: true,
+                    maintainAspectRatio: false,  
+                    scales: {
+                      x: {
+                        grid: {
+                          display: false
+                        }
+                      },
+                      y: {
+                        type: 'linear',
+                        position : 'right',
+                        stack: 'demo',
+                        beginAtZero: false,
+                        title: {
+                          display : true,
+                          text: 'WTI Price'
+                        },
+                        grid: {
+                          display: true
+                        }
+                      },
+                      y1: {
+                        offset: true,
+                        type: 'linear',
+                        position : 'right',
+                        stack: 'demo',
+                        title: {
+                          display : true,
+                          text: 'WTI Volume'
+                        },
+                        grid: {
+                          display: true
+                        },
+                        ticks: {
+                          beginAtZero: false,
+                          callback: function(value, index, values) {
+                            if(values[0].toString().length > 4 && value != 0) return (Math.floor(value / 100000)).toLocaleString("ko-KR") + "0.0K";
+                            else if(values[0].toString().length = 4 && value != 0) return (value / 100000).toFixed(1) + "0.0k";
+                            else return value.toLocaleString("ko-KR");
+                          },
+                        },        
+                      },
+                    },
+                    interaction: {
+                      intersect: false,
+                      mode: 'index',
+                    },
+                }, // data code 끝
+            } // config code 끝
+            chartInstance = new Chart(ctx, config);
+            }
+        });
+      } // addXLE function 끝
+
+
+      function renderWithCPI() {
+        console.log('func4')
+        //const chart = new Chart(document.getElementById("myChart").getContext("2d"), config);
+        //chart.destroy();
+        // $("canvas#myChart").remove();
+        // $("div.myChart").append('<canvas id="myChart" class="animated fadeIn" height="600"></canvas>');
+    
+        console.log(period)
+        $.ajax({
+          type: "GET",
+          url: "/wti_chart_addIndex/" + period,
+          data: {},
+          dataType:"json",
+          success: function(response) {
+            // response [{},{},{},...]
+                      
+            // JS - Destroy exiting Chart Instance to reuse <canvas> element
+            let chartStatus = Chart.getChart("myChart"); // <canvas> id
+              if (chartStatus != undefined) {
+                chartStatus.destroy();
+              }
+            //-- End of chart destroy  
+
+            response.reverse();
+            console.log(response[0])
+
+            //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+            const dateList = []
+            const wtipriceList = []
+            const wtivolList = []
+            const cpiList = []
+            // const cpiyoyList = []
+            for (const res of response) {
+                dateList.push(res["Date"])
+                wtipriceList.push(res["WTI_price"])
+                wtivolList.push(res["WTI_vol"])
+                cpiList.push(res["CPI_Korea"]*10)
+            }
+            // for (var i of cpiList) {
+            //     var j = i+365
+            //     cpiyoyList.push(((cpiList[i] - cpiList[j]) / cpiList[j]) * 100)
+            // }
+            console.log("cpi10---->"+ cpiList)
+
+            //cpi 수치 변경
+            // const result = cpiList.reduce(function add(sum, currValue) {
+            //   return sum + currValue;
+            // }, 0);
+            //   const cpi_avg = result / cpiList.length;
+            //   console.log(cpi_avg); 
+              
+            // for (const i of cpiList) {
+            //   cpiyoyList.push((i*100)/cpi_avg)
+            // }
+
+         
+            
+            //CPI YOY 계산 구간
+            // for (var i=0; i<(cpiList.length-365); i++) {
+            //   cpiyoyList.push(((cpiList[i] - cpiList[i+365]) / cpiList[i+365]) * 100)
+            // }
+
+            dateList.reverse()  
+            wtipriceList.reverse()  
+            wtivolList.reverse()  
+            cpiList.reverse() 
+
+            console.log(dateList)
+            console.log(wtipriceList)
+            console.log(wtivolList)
+            console.log('cpi'+ cpiList)
+
+            // let i
+            // let j = i-365
+            // const cpiyoyList = ((cpipriceList[i] - cpipriceList[j]) / cpipriceList[j]) * 0.01
+
+            let ctx = document.getElementById("myChart").getContext("2d")
+           
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, "rgba(46,196,182,0.4)");
+            gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+
+            const config = {
+              plugins: [{
+                  afterDraw: chart => {
+                    if (chart.tooltip?._active?.length) {               
+                      let x = chart.tooltip._active[0].element.x;             
+                      let yAxis = chart.scales.y;
+                      let yAxis1 = chart.scales.y1;
+                      let ctx = chart.ctx;
+                      ctx.save();
+                      ctx.beginPath();
+                      ctx.moveTo(x, yAxis.top);
+                      ctx.lineTo(x, yAxis1.bottom);
+                      ctx.lineWidth = 1;
+                      ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+                      ctx.stroke();
+                      ctx.restore();
+                    }
+                  }
+                }],
+                
+                data: {
+                    labels: dateList,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: "WTI Price",
+                            data: wtipriceList,
+                            borderColor: '#2EC4B6',
+                            borderWidth: 2,
+                            backgroundColor: gradient,
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'line',
+                            label: "CPI",
+                            data: cpiList,
+                            borderColor: 'rgb(255,225,53)',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            pointBorderColor: 'red',
+                            pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+                            pointStyle: 'circle',
+                            pointRadius: 0,
+                            pointHoverRadius: 12,
+                            categoryPercentage: 0.8,
+                        },
+                        {
+                            type: 'bar',
+                            label: "WTI Volume",
+                            yAxisID : 'y1',
+                            data: wtivolList,
+                            borderColor: '#ff6666',
+                            backgroundColor: '#222222',
+                            hoverBorderColor: '#5d2e8c',
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.2,
+                            barThickness: 1
+                        }
+                    ],
+                },
+                options: {
+                    fill: true,
+                    responsive: true,
+                    maintainAspectRatio: false,  
+                    scales: {
+                      x: {
+                        grid: {
+                          display: false
+                        }
+                      },
+                      y: {
+                        type: 'linear',
+                        position : 'right',
+                        stack: 'demo',
+                        beginAtZero: false,
+                        title: {
+                          display : true,
+                          text: 'WTI Price'
+                        },
+                        grid: {
+                          display: true
+                        }
+                      },
+                      y1: {
+                        offset: true,
+                        type: 'linear',
+                        position : 'right',
+                        stack: 'demo',
+                        title: {
+                          display : true,
+                          text: 'WTI Volume'
+                        },
+                        grid: {
+                          display: true
+                        },
+                        ticks: {
+                          beginAtZero: false,
+                          callback: function(value, index, values) {
+                            if(values[0].toString().length > 4 && value != 0) return (Math.floor(value / 100000)).toLocaleString("ko-KR") + "0.0K";
+                            else if(values[0].toString().length = 4 && value != 0) return (value / 100000).toFixed(1) + "0.0k";
+                            else return value.toLocaleString("ko-KR");
+                          },
+                        },        
+                      },
+                    },
+                    interaction: {
+                      intersect: false,
+                      mode: 'index',
+                    },
+                }, // data code 끝
+            } // config code 끝
+            chartInstance = new Chart(ctx, config);
+            }
+        });
+      } //addcpi function 끝
+
+
+      // function renderWithCLI() {
+      //   console.log('func3')
+      //   console.log(period)
+      //   $.ajax({
+      //     type: "GET",
+      //     url: "/wti_chart_addIndex/" + period,
+      //     data: {},
+      //     dataType:"json",
+      //     success: function(response) {
+      //       // response [{},{},{},...]
+                      
+      //       // JS - Destroy exiting Chart Instance to reuse <canvas> element
+      //       let chartStatus = Chart.getChart("myChart"); // <canvas> id
+      //         if (chartStatus != undefined) {
+      //           chartStatus.destroy();
+      //         }
+      //       //-- End of chart destroy  
+
+      //       response.reverse();
+      //       console.log(response[0])
+
+      //       //chart 데이타 받는 부분입니다. ---> 날짜, 가격, 볼륨
+      //       const dateList = []
+      //       const wtipriceList = []
+      //       const wtivolList = []
+      //       const cliList = []
+      //       for (const res of response) {
+      //           dateList.push(res["Date"])
+      //           wtipriceList.push(res["WTI_price"])
+      //           wtivolList.push(res["WTI_vol"])
+      //           cliList.push(res["CLI_US"])
+      //       }
+      //       dateList.reverse()  
+      //       wtipriceList.reverse()  
+      //       wtivolList.reverse()  
+      //       cliList.reverse() 
+
+      //       console.log(dateList)
+      //       console.log(wtipriceList)
+      //       console.log(wtivolList)
+      //       console.log(cliList)
+
+      //       let ctx = document.getElementById("myChart").getContext("2d")
+           
+      //       let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      //       gradient.addColorStop(0, "rgba(255,255,255,0.5)");
+      //       gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+
+      //       const config = {
+      //         plugins: [{
+      //             afterDraw: chart => {
+      //               if (chart.tooltip?._active?.length) {               
+      //                 let x = chart.tooltip._active[0].element.x;             
+      //                 let yAxis = chart.scales.y;
+      //                 let yAxis1 = chart.scales.y1;
+      //                 let ctx = chart.ctx;
+      //                 ctx.save();
+      //                 ctx.beginPath();
+      //                 ctx.moveTo(x, yAxis.top);
+      //                 ctx.lineTo(x, yAxis1.bottom);
+      //                 ctx.lineWidth = 1;
+      //                 ctx.strokeStyle = 'rgba(255, 0, 0, 0.4)';
+      //                 ctx.stroke();
+      //                 ctx.restore();
+      //               }
+      //             }
+      //           }],
+                
+      //           data: {
+      //               labels: dateList,
+      //               datasets: [
+      //                   {
+      //                       type: 'line',
+      //                       label: "WTI Price",
+      //                       data: wtipriceList,
+      //                       borderColor: '#2EC4B6',
+      //                       borderWidth: 2,
+      //                       backgroundColor: gradient,
+      //                       pointBorderColor: 'red',
+      //                       pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+      //                       pointStyle: 'circle',
+      //                       pointRadius: 0,
+      //                       pointHoverRadius: 12,
+      //                       categoryPercentage: 0.8,
+      //                   },
+      //                   {
+      //                       type: 'line',
+      //                       label: "CLI",
+      //                       data: cliList,
+      //                       borderColor: '#5d2e8c',
+      //                       borderWidth: 2,
+      //                       backgroundColor: gradient,
+      //                       pointBorderColor: 'red',
+      //                       pointBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+      //                       pointStyle: 'circle',
+      //                       pointRadius: 0,
+      //                       pointHoverRadius: 12,
+      //                       categoryPercentage: 0.8,
+      //                   },
+      //                   {
+      //                       type: 'bar',
+      //                       label: "WTI Volume",
+      //                       yAxisID : 'y1',
+      //                       data: wtivolList,
+      //                       borderColor: '#ff6666',
+      //                       backgroundColor: '#222222',
+      //                       hoverBorderColor: '#5d2e8c',
+      //                       categoryPercentage: 0.8,
+      //                       barPercentage: 0.2,
+      //                       barThickness: 1
+      //                   }
+      //               ],
+      //           },
+      //           options: {
+      //               fill: true,
+      //               responsive: true,
+      //               maintainAspectRatio: false,  
+      //               scales: {
+      //                 x: {
+      //                   grid: {
+      //                     display: false
+      //                   }
+      //                 },
+      //                 y: {
+      //                   type: 'linear',
+      //                   position: 'right',
+      //                   stack: 'demo',
+      //                   beginAtZero: true,
+      //                   title: {
+      //                     display : true,
+      //                     text: 'WTI Price'
+      //                   },
+      //                   grid: {
+      //                     display: true
+      //                   }
+      //                 },
+      //                 y1: {
+      //                   offset: true,
+      //                   type: 'linear',
+      //                   position: 'right',
+      //                   stack: 'demo',
+      //                   title: {
+      //                     display : true,
+      //                     text: 'WTI Volume'
+      //                   },
+      //                   grid: {
+      //                     display: true
+      //                   },
+      //                   ticks: {
+      //                     beginAtZero: true,
+      //                     callback: function(value, index, values) {
+      //                       if(values[0].toString().length > 4 && value != 0) return (Math.floor(value / 100000)).toLocaleString("ko-KR") + "0.0K";
+      //                       else if(values[0].toString().length = 4 && value != 0) return (value / 100000).toFixed(1) + "0.0k";
+      //                       else return value.toLocaleString("ko-KR");
+      //                     },
+      //                   },        
+      //                 },
+      //               },
+      //               interaction: {
+      //                 intersect: false,
+      //                 mode: 'index',
+      //               },
+      //           }, // data code 끝
+      //       } // config code 끝
+      //       chartInstance = new Chart(ctx, config);
+      //       }
+      //   });
+      // } // addDJI function 끝     
+
+//    console.log("All resources finished loading!");
+//  });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=chrome">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="static/wti.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!--<script th:src="@{https://code.jquery.com/jquery-3.5.1.slim.min.js}"
+        crossorigin="anonymous"></script>-->
+        <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+            crossorigin="anonymous">
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+            integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+            integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+            crossorigin="anonymous"></script>
+
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+            }
+            .container{
+              width:100%;
+            }
+
+            .road {
+                width: 0;
+                height: 0;
+                border-bottom: 46.875rem solid #f1e8b8;
+                border-top: 0 solid transparent;
+                border-left: 31.25rem solid transparent;
+                border-right: 31.25rem solid transparent;
+            }
+
+            .bubble {
+                position: relative;
+                width: 250px;
+                height: 250px;
+                background-color: white;
+                opacity: 0.5;
+                border-radius: 50%;
+            }
+
+            .bubble::after {
+                content: '';
+                position: absolute;
+                right: -40px;
+                top: 50%;
+                margin-top: -20px;
+                border-top: 20px solid transparent;
+                border-right: 20px solid transparent;
+                border-bottom: 20px solid transparent;
+                border-left: 20px solid white;
+            }
+
+            .text {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                margin: 0;
+                padding: 5%;
+                text-align: center;
+            }
+
+            .oilman {
+                position: relative;
+            }
+
+            
+            
+          
+        </style>
+    </head>
+
+    <body >
+        <div class="container m-auto">
+        <!-- Nav -->
+          <nav class="navbar fixed-top" style="border-color: #2EC4B6;" width:100%;>
+              <div class="container-fluid" >
+                  <div style="padding:auto;">
+                  <a class="navbar-brand" href="#" onclick="location.href='page';"><img src="/static/WTI_logo(white).png"></a>
+                </div>
+                  <button
+                      class="navbar-toggler "
+                      type="button"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasNavbar"
+                      aria-controls="offcanvasNavbar">
+                      <span align="right" class="navbar-toggler-icon"></span>
+                  </button>
+                
+                  <div
+                      class="offcanvas offcanvas-end"
+                      tabindex="-1"
+                      id="offcanvasNavbar"
+                      aria-labelledby="offcanvasNavbarLabel">
+                      <div class="offcanvas-header">
+                          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">More..</h5>
+                          <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="offcanvas"
+                              aria-label="Close"></button>
+                      </div>
+                      <div class="offcanvas-body">
+                          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item color-primary">
+                                <a
+                                    class="nav-link active"
+                                    aria-current="page"
+                                    href="#"
+                                    onclick="location.href='page5?time=180';">Graph</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="location.href='page6?day=50';">Forecast</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="location.href='page2?page=1';">News</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" href="#" onclick="location.href='page';">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled">insights</a>
+                            </li>
+                      </div>
+                  </div>
+              </div>
+          </nav>
+        </div>
+
+        <div class="container">
+          <div class="row m-auto">
+            <br>
+            <br>
+
+            <div class="row m-auto top3" id="gif_only" style="border : 0.1rem solid white;"><img src = "/static/oil_rig.gif"></div>
+            <br>
+            <div class="text-box top4 d-none d-lg-block h1" style="text-align:center;" >
+              <b>Rise or Fall? </b>
+            </div>
+            <div class="text-box top3 d-lg-none" style="text-align:center;" >
+              <b>Rise or Fall? </b>
+            </div>
+
+            <div class='text-box4 top5 d-none d-lg-block h2' style='text-align:center;'>
+              Forecating <b>WTI</b><br>
+              Crudeoil Futures Price<br>
+            </div>
+
+            <div class='text-box4 top4 d-lg-none' style='text-align:center;'>
+              Forecating <b>WTI</b><br>
+              Crudeoil Futures Price<br>
+            </div>
+
+            <div class='text-box top6 d-none d-lg-block' style='text-align:center;' align="center;" >
+              <img id="logo1" src="/static/WTI_logo.png">
+            </div>
+
+            <div class='text-box top4_1 d-lg-none' style='text-align:center;' align="center;">
+              <img id="logo1" src="/static/WTI_logo.png">
+            </div>
+
+            <br>
+            
+          </div>
+          <br>
+          <br>
+
+          <div class="row m-auto">
+            <br>
+            <br>
+            <div class="top6" ></div>
+            <br>
+            <br>
+            
+            <br><br><br>
+
+            <div class="col-12 h1 top6" style="text-align:center;" id="scroll_down">
+              
+            </div>
+
+          </div>
+          <!-- <div class="contents-section">
+
+              <div class="main_circle" >
+              </div>
+              <div class="main_circle2" >
+              </div>
+
+              
+              <div class='text-box5 h3 top_over' id="text1" style='text-align:center;'>
+                Thanks
+                  <h1 onclick="location.href='page5';">101</h1> 
+                  3
+              </div>
+              <div class='text-box5 h2_1 top_over' id="text2" style='text-align:center;'>
+                2
+              </div>
+              <div class='text-box5 h0 top_over' id="text3" style='text-align:center;'>
+                1
+              </div>
+            
+          </div>
+        -->
+        
+        <!--
+          <div class="bottom-section top2_1">
+              <div class="road">
+                   <div class="bubble">
+                      <p class="text">Hi. I'm your mate.</p>
+                  </div>
+                  <div class="oilman">
+                      <img src="../static/oilman.png" width="180px">
+                  </div> 
+                  <!-- <div class="bottom-menu">-->
+                  <!-- <a class="menu-items" href="#" onclick="location.href='page5';"> graph
+                  </a>-->
+                  <!-- <a class="menu-items" href="#" onclick="location.href='page2';">news</a>-->
+                  <!-- <a class="menu-items" href="#">insights</a>-->
+                  <!-- <a class="menu-items" href="#" onclick="location.href='page';">home</a>-->
+                  <!-- </div>
+              </div>
+          </div>-->
+          
+            
+                <div class="col-12 top6" id="blankBox" style="border-top : 0.2rem solid #2ec4b6;"></div>
+            
+          
+        <!-- <div class="row m-auto" id="gif_only" style="border : 0.1rem solid white;"><img src = "/static/sru_crudeoil.gif"></div> -->
+        <div class='text-box2_0 top2 d-none d-lg-block' style='text-align:center;'>
+          <b style="color: #2ec4b6;">Model</b> <span style="color:black; font-size:50px;" >Process</span>
+        </div>
+        <div class='text-box top2 d-lg-none' style='text-align:center;'>
+          <b style="color: #2ec4b6;">Model</b> <span style="color:black;" >Process</span>
+        </div>
+        <div class="top1 d-none d-lg-block" style="text-align : center;" >
+          <img style="width:60%;" src = "/static/seocho_img1.png">
+        </div>
+        <div class="top1 d-lg-none" style="text-align : center;" >
+          <img style="width:100%;" src = "/static/seocho_img1.png">
+        </div>
+        
+          
+              <div class="col-12" id="blankBox" style="border-bottom : 0.2rem solid #2ec4b6;"></div>
+        
+        
+          <!--
+          <div class="container">
+            <div class="row m-auto">
+              <div class="imgss col-12" style=" border : 0.1rem solid white;" text-align="left;">
+                <img src = "/static/process_wti.png">
+              
+              </div>
+            </div>
+          </div>
+          
+          <div class="container">
+            <div class="row m-auto">
+              <div class="imgss col-12" style="height: 180px; border : 0.1rem solid white;" text-align="right;">
+                <img src = "/static/oil_learn.png">
+              
+              </div>
+            </div>
+          </div>
+
+          <div class="container">
+            <div class="row m-auto">
+              <div class="imgss col-12" style="" text-align="center;">
+                <img src = "/static/oil_graph01.png">
+              
+              </div>
+            </div>
+          </div>
+          -->
+
+          <div class="container">
+            <div class="row m-auto">
+              <div class="col-12" style="height:70px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-auto">
+            <div class="col-12 m-auto h1">
+              <img id="logo1" src="/static/WTI_logo.png">
+              <br>
+            </div>
+            <div class="col-12">  <br></div>
+            <div class="col-12 h3 d-none d-lg-block">
+              : Most Popular
+            </div>
+
+            <div class="col-12 h3_1 d-lg-none">
+              : Most Popular
+            </div>
+
+            <div class="col-12 body3 d-none d-lg-block">
+              - WTI price Forecasting<br>
+              - WTI News <br>
+              - News Data Visualization
+            </div>
+
+            <div class="col-12 body2 d-lg-none">
+              - WTI price Forecasting<br>
+              - WTI News <br>
+              - News Data Visualization
+            </div>
+          </div>
+          <br>
+          <div style="border-bottom : 0.2rem solid #2ec4b6;" margin-top:"2rem"></div>
+
+
+          <div class="chart_container carousel_box top3">
+            <canvas id="myChart" height="70vw" width="90vw"></canvas>
+          </div>
+
+          <!-- 
+          <div class="row main mb-5 mt-5 m-auto carousel_setting showItemUp" width: 100%;> 
+            <div
+              id="carouselExampleCaptions"
+              class="carousel slide"
+              data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide-to="0"
+                    class="active"
+                    aria-current="true"
+                    aria-label="Slide 1"></button>
+                <button
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner border-rad-20">
+                <div class="carousel-item active">
+                    
+                </div>
+                <div class="carousel-item">
+                  <div class="carousel_box">
+                      <a href="" onclick="location.href='page2';"><img src="/static/hot-topic.jpeg" style="margin:auto"></a>
+                  </div>
+                </div>
+                <div class="carousel-item ">
+                    <div class="carousel_box">
+                        <h5 style="text-align:center">Today News</h5>
+                        <a href="#">
+                            <div class="boxbox" onclick="location.href='page2';">TTEST</div>
+                        </a><br>
+                        <a href="#">
+                            <div class="boxbox" onclick="location.href='page2';">TestPage2</div>
+                        </a><br>
+                    </div>
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselExampleCaptions"
+                  data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+          -->
+        
+        <div class="addText h2_1 top4 d-lg-none" style='text-align:center;'>
+          <button class="btn5" onclick="location.href='page';">Tap up</button>
+        </div>
+
+    <script>
+
+        $.ajax({
+            type: "GET",
+            url: "/wti_chart",
+            data: {},
+            dataType: "json",
+            success: function (response) {
+                /*console.log("기존것"+response[0])*/
+
+                const dateList = [] 
+                const wtipriceList = [] 
+                const dateList2 = [] 
+                const wtipriceList2 = []
+                const wtipriceList3 = []  
+                for (const res of response) {
+                    dateList.push(res["Date"])
+                    wtipriceList.push(res["WTI_price"])
+                    wtipriceList3.push(res["WTI_price"])
+                }
+                console.log(dateList)
+                console.log(wtipriceList)
+                /*dateList.reverse();*/
+                /*wtipriceList.reverse();
+                wtipriceList3.reverse();
+                /*console.log("rever"+dateList)
+                console.log("rever"+wtipriceList)*/
+                  $.ajax({
+                    type: "GET",
+                    url: "/wti_chart/plus",
+                    data: {},
+                    dataType: "json",
+                    success: function (response) {
+                      /*console.log("왔나요?"+response[0])*/
+                      for (const res of response) {
+                        dateList.push(res["Date"])
+                        dateList2.push(res["Date"])
+                        wtipriceList2.push(res["WTI_price"])
+                        wtipriceList3.push(res["WTI_price"])
+                      }
+                      console.log(dateList)
+                      const ctx = document
+                          .getElementById("myChart")
+                          .getContext("2d")
+                      let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                      gradient.addColorStop(0, "rgba(255,255,255,0.5)");
+                      gradient.addColorStop(1, "rgba(255,255,255,0.1)");
+                        /*console.log("총길이"+dateList);
+                        console.log("예측값"+wtipriceList2);
+                        console.log("이전값"+wtipriceList);
+                        console.log("더한값"+wtipriceList3);*/
+
+                      new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dateList,
+                            datasets: [
+                                {
+                                    label: "WTI Price",
+                                    data: wtipriceList,
+                                    borderColor: 'black',
+                                    borderWidth: 2,
+                                    backgroundColor: gradient,
+                                    pointBackgroundColor: "black",
+                                    pointStyle: 'circle',
+                                    pointRadius: 0.5,
+                                    pointHoverRadius: 10
+                                },{
+
+                                  
+                                  label: "Predicted WTI Price",
+                                  data: wtipriceList3,
+                                  borderColor: '#ff6666',
+                                  borderWidth: 2,
+                                  backgroundColor: gradient,
+                                  pointBackgroundColor: "#ff6666",
+                                  pointStyle: 'circle',
+                                  pointRadius: 0.5,
+                                  pointHoverRadius: 10
+                                  
+                              }
+                           ]
+                        },
+                        options: {
+                            fill: true,
+                            tension: 0.1,
+                            scales: {
+                                y: {
+                                    beginAtZero: false
+                                }
+                            },
+                            responsive: true,
+                            animation: true
+                        }
+                    });
+
+                    }
+                  })
+                
+                
+            }
+        });
+
+  /*      
+  $(window).scroll(function(){
+    var scroll_len = $(window).scrollTop();
+    console.log(scroll_len);
+
+    var y =  -1/500 * scroll_len + 85/50;
+    $('.main_circle').eq(0).css('opacity', y);
+
+    console.log('y값 : '+y); 
+
+    var z = (-1/500) * scroll_len + (-160/500);
+    $('.main_circle').eq(0).css('transform', `scale( ${z} )`);
+
+    console.log('z값 : '+z);
+
+    if(scroll_len < 210) {
+      $('.text-box4').css('visibility', 'visible');
+      $('#scroll_down').css('visibility', 'visible');
+    }else {
+      $('.text-box4').css('visibility', 'hidden');
+      $('#scroll_down').css('visibility', 'hidden');
+    }
+
+
+    if(scroll_len > 300) {
+      $('.blank').append('<br>');
+    }else {
+      $('.blank').empty('');
+      // remove, push, pop 같은 형태로 만들고 싶다.
+    }
+
+    if(scroll_len <= 400) {
+      $('.bottom-section').css('visibility', 'visible');
+      //$('.text-box').eq(0).css('color', '#2EC4B6');
+      //$('.text-box2').eq(0).css('color', '#2EC4B6');
+      
+    }else {
+      $('.bottom-section').css('visibility', 'hidden');
+      $('.blank').empty('');
+      
+    }
+
+    if (scroll_len > 400) {  
+      $('.blank').empty('');
+    }
+
+    if(scroll_len > 800){
+      $('#text1').eq(0).css('color','#2EC4B6');
+      $('.main_circle').css('visibility', 'hidden');
+      $('.blank').css('visibility', 'hidden');
+      
+    }else {
+      $('#text1').eq(0).css('color','white');
+      $('.main_circle').css('visibility', 'visible');
+      $('.blank').css('visibility', 'visible');
+      
+    }
+
+    if(scroll_len > 850){
+      $('#text2').eq(0).css('color','#2EC4B6');
+      $('.main_circle').css('visibility', 'hidden');
+      $('.blank').css('visibility', 'hidden');
+      
+    }else {
+      $('#text2').eq(0).css('color','white');
+      $('.main_circle').css('visibility', 'visible');
+      $('.blank').css('visibility', 'visible');
+      
+    }
+
+    if(scroll_len > 900){
+      $('#text3').eq(0).css('color','#2EC4B6');
+      $('.main_circle').css('visibility', 'hidden');
+      $('.blank').css('visibility', 'hidden');
+      
+    }else {
+      $('#text3').eq(0).css('color','white');
+      $('.main_circle').css('visibility', 'visible');
+      $('.blank').css('visibility', 'visible');
+      
+    }
+
+
+
+    if(scroll_len > 1450) {
+      $('.text-box2').eq(0).css('color', 'white');
+    }else {
+      $('.text-box2').eq(0).css('color','#2EC4B6');
+    }
+    /*
+    if(scroll_len > 1550) {
+      $('.text-box3').eq(0).css('color', 'black');
+      $('.text-box2').eq(0).css('color','#2EC4B6');
+      $('.text-box').eq(0).css('color','#2EC4B6');
+    }else{
+      $('.text-box3').eq(0).css('color','#2EC4B6');
+      
+    }
+    */
+    
+    //if (scroll_len > 2000) {
+    //  $('.main_circle').eq(0).css('opacity', y);
+    //  $('.bottom-section').css('display', 'none');
+    //}
+
+    //$('.bottom-section').eq(0).css('transform:translateY()', 100);
+   //})
+  
+    </script>
+
+            
+    </body>
+</html>
